@@ -12,6 +12,10 @@ const statPendapatan = document.querySelector('#stat-pendapatan');
 const statPiutang = document.querySelector('#stat-piutang');
 const statOmset = document.querySelector('#stat-omset');
 
+// Elemen Tombol Reset (Baru)
+const btnResetSummary = document.querySelector('#btn-reset-summary');
+const btnResetLaporan = document.querySelector('#btn-reset-laporan');
+
 // Helper Function: Update Angka Ringkasan Laporan
 function updateSummaryCards(totalKasLunas, totalPiutangAsuransi) {
   const totalOmset = totalKasLunas + totalPiutangAsuransi;
@@ -255,6 +259,43 @@ if (formTransaksi) {
     loadPersediaan();
     loadPasien();
     loadTransaksi();
+  });
+}
+
+// -------------------------------------------------------------
+// 6. FITUR BARRU: RESET PERHITUNGAN & LAPORAN
+// -------------------------------------------------------------
+
+// A. Reset Hanya Perhitungan Tampilan Summary (Pendapatan, Piutang, Omset)
+if (btnResetSummary) {
+  btnResetSummary.addEventListener('click', () => {
+    const konfirmasi = confirm('Reset angka perhitungan summary (Pendapatan, Piutang, Omset) ke Rp 0?');
+    if (konfirmasi) {
+      updateSummaryCards(0, 0);
+      alert('Perhitungan angka ringkasan telah direset ke 0.');
+    }
+  });
+}
+
+// B. Reset Seluruh Data Laporan Transaksi dari Database Supabase
+if (btnResetLaporan) {
+  btnResetLaporan.addEventListener('click', async () => {
+    const konfirmasi = confirm('PERHATIAN: Apakah Anda yakin ingin menghapus SELURUH data transaksi medis di database? Tindakan ini tidak dapat dibatalkan.');
+    if (!konfirmasi) return;
+
+    // Menghapus seluruh baris data pada tabel transaksi_medis
+    const { error } = await supabase
+      .from('transaksi_medis')
+      .delete()
+      .neq('id_transaksi', 0); // Menghapus semua ID yang bukan 0
+
+    if (error) {
+      alert('Gagal mereset laporan transaksi: ' + error.message);
+      return;
+    }
+
+    alert('Seluruh data laporan transaksi berhasil dihapus/direset!');
+    loadTransaksi(); // Reload tabel & ringkasan otomatis
   });
 }
 
