@@ -5,106 +5,176 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIA Dokter Umum - Persediaan & Piutang</title>
   <link rel="stylesheet" href="../css/style.css">
+  <!-- Material Icons / Lucide Icons Support -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 <body>
 
-  <header>
-    <h2>SIA Praktik Dokter Umum</h2>
-    <p>Manajemen Persediaan, Jasa Medis, dan Piutang Asuransi</p>
-  </header>
+  <!-- Sidebar Navigasi Kiri -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span class="material-symbols-outlined icon">local_hospital</span>
+      <h2>SIA Medika</h2>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <a href="#dashboard" class="nav-item active" onclick="switchPage('dashboard')">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Dashboard & Stok</span>
+      </a>
+      <a href="#transaksi" class="nav-item" onclick="switchPage('transaksi')">
+        <span class="material-symbols-outlined">edit_note</span>
+        <span>Input Transaksi</span>
+      </a>
+      <a href="#laporan" class="nav-item" onclick="switchPage('laporan')">
+        <span class="material-symbols-outlined">payments</span>
+        <span>Laporan & Piutang</span>
+      </a>
+    </nav>
+  </aside>
 
-  <main class="container">
-    <!-- Section Ringkasan Laporan Akuntansi -->
-    <section class="summary-grid">
-      <div class="summary-card total-pendapatan">
-        <h4>Total Pendapatan (Kas Lunas)</h4>
-        <p id="stat-pendapatan">Rp 0</p>
+  <!-- Konten Utama Right Side -->
+  <div class="main-wrapper">
+    <!-- Top Header Bar -->
+    <header class="top-header">
+      <div class="header-title">
+        <h2>SIA Praktik Dokter Umum</h2>
+        <p>Manajemen Persediaan, Jasa Medis, dan Piutang Asuransi</p>
       </div>
-      <div class="summary-card total-piutang">
-        <h4>Total Piutang Asuransi</h4>
-        <p id="stat-piutang">Rp 0</p>
+      <div class="status-badge">
+        <span class="dot"></span> Database Connected
       </div>
-      <div class="summary-card total-omset">
-        <h4>Total Omset/Omzet</h4>
-        <p id="stat-omset">Rp 0</p>
+    </header>
+
+    <main class="container">
+      
+      <!-- PAGE 1: DASHBOARD & STOK PERSEDIAAN -->
+      <div id="page-dashboard" class="page-content active">
+        <!-- Section Ringkasan Laporan Akuntansi -->
+        <section class="summary-grid">
+          <div class="summary-card">
+            <h4>Total Pendapatan (Kas Lunas)</h4>
+            <p id="stat-pendapatan">Rp 0</p>
+          </div>
+          <div class="summary-card">
+            <h4>Total Piutang Asuransi</h4>
+            <p id="stat-piutang">Rp 0</p>
+          </div>
+          <div class="summary-card highlight">
+            <h4>Total Omset / Omzet</h4>
+            <p id="stat-omset">Rp 0</p>
+          </div>
+        </section>
+
+        <!-- Section Stok Persediaan -->
+        <section class="card">
+          <div class="card-header">
+            <h3>Stok Persediaan Obat & Alkes</h3>
+          </div>
+          <table id="table-persediaan">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nama Item</th>
+                <th>Kategori</th>
+                <th>Stok</th>
+                <th>Harga Satuan</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
       </div>
-    </section>
 
-    <!-- Section Stok Persediaan -->
-    <section class="card">
-      <h3>Stok Persediaan Obat & Alkes</h3>
-      <table id="table-persediaan">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nama Item</th>
-            <th>Kategori</th>
-            <th>Stok</th>
-            <th>Harga Satuan</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
+      <!-- PAGE 2: INPUT TRANSAKSI MEDIS -->
+      <div id="page-transaksi" class="page-content">
+        <section class="card">
+          <div class="card-header">
+            <h3>Input Transaksi Medis</h3>
+          </div>
+          <form id="form-transaksi">
+            <div class="form-group">
+              <label for="select-pasien">Pasien:</label>
+              <select id="select-pasien" required>
+                <option value="">-- Pilih Pasien --</option>
+              </select>
+            </div>
 
-    <!-- Section Input Transaksi Medis -->
-    <section class="card">
-      <h3>Input Transaksi Medis</h3>
-      <form id="form-transaksi">
-        <label for="select-pasien">Pasien:</label>
-        <select id="select-pasien" required>
-          <option value="">-- Pilih Pasien --</option>
-        </select>
+            <div class="form-group">
+              <label for="select-item">Item Obat / Alkes:</label>
+              <select id="select-item" required>
+                <option value="">-- Pilih Obat/Alkes --</option>
+              </select>
+            </div>
 
-        <label for="select-item">Item Obat / Alkes:</label>
-        <select id="select-item" required>
-          <option value="">-- Pilih Obat/Alkes --</option>
-        </select>
+            <div class="form-group">
+              <label for="jumlah-item">Jumlah Obat/Alkes:</label>
+              <input type="number" id="jumlah-item" value="1" min="1" required>
+            </div>
 
-        <label for="jumlah-item">Jumlah Obat/Alkes:</label>
-        <input type="number" id="jumlah-item" value="1" min="1" required>
+            <div class="form-group">
+              <label for="biaya-jasa">Biaya Jasa Dokter (Rp):</label>
+              <input type="number" id="biaya-jasa" value="50000" required>
+            </div>
 
-        <label for="biaya-jasa">Biaya Jasa Dokter (Rp):</label>
-        <input type="number" id="biaya-jasa" value="50000" required>
+            <div class="form-group full-width">
+              <label for="status-pembayaran">Status Pembayaran:</label>
+              <select id="status-pembayaran">
+                <option value="Lunas">Lunas (Tunai)</option>
+                <option value="Piutang Asuransi">Piutang Asuransi</option>
+              </select>
+            </div>
 
-        <label for="status-pembayaran">Status Pembayaran:</label>
-        <select id="status-pembayaran">
-          <option value="Lunas">Lunas (Tunai)</option>
-          <option value="Piutang Asuransi">Piutang Asuransi</option>
-        </select>
-
-        <button type="submit">Proses Transaksi</button>
-      </form>
-    </section>
-
-    <!-- Section Laporan Pendapatan & Piutang Asuransi -->
-    <section class="card">
-      <h3>Laporan Pendapatan & Piutang Asuransi</h3>
-      <table id="table-transaksi">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Tanggal</th>
-            <th>Pasien</th>
-            <th>Penjamin / Asuransi</th>
-            <th>Item Obat</th>
-            <th>Biaya Jasa</th>
-            <th>Total Biaya</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-
-      <!-- Posisikan tombol reset di sini (DI DALAM SECTION ATAU MAIN) -->
-      <div style="margin-top: 15px; display: flex; gap: 10px;">
-        <button id="btn-reset-summary" type="button">Reset Perhitungan Summary</button>
-        <button id="btn-reset-laporan" type="button">Reset Seluruh Laporan Transaksi</button>
+            <button type="submit" class="btn-primary">Proses Transaksi</button>
+          </form>
+        </section>
       </div>
-    </section>
 
-  </main> <!-- Penutup main harus di bawah konten/tombol -->
+      <!-- PAGE 3: LAPORAN PENDAPATAN & PIUTANG -->
+      <div id="page-laporan" class="page-content">
+        <section class="card">
+          <div class="card-header">
+            <h3>Laporan Pendapatan & Piutang Asuransi</h3>
+          </div>
+          <table id="table-transaksi">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tanggal</th>
+                <th>Pasien</th>
+                <th>Penjamin / Asuransi</th>
+                <th>Item Obat</th>
+                <th>Biaya Jasa</th>
+                <th>Total Biaya</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+
+          <div class="reset-actions">
+            <button id="btn-reset-summary" type="button" class="btn-secondary">Reset Perhitungan Summary</button>
+            <button id="btn-reset-laporan" type="button" class="btn-danger">Reset Seluruh Laporan Transaksi</button>
+          </div>
+        </section>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Script Navigasi Tab Sederhana -->
+  <script>
+    function switchPage(pageName) {
+      // Sembunyikan semua halaman
+      document.querySelectorAll('.page-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      // Tampilkan halaman yang dipilih
+      document.getElementById('page-' + pageName).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+  </script>
 
   <script type="module" src="../js/app.js"></script>
 </body>
